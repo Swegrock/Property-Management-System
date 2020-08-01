@@ -1,5 +1,5 @@
 package com.mootz.property.Models;
-
+// property class
 public class Property {
 
 	// The ID of the property, different for every property.
