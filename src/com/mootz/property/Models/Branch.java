@@ -1,9 +1,13 @@
 package com.mootz.property.Models;
 
+import java.io.*;
 import java.util.*;
 import java.util.stream.*;
 
-public class Branch {
+public class Branch implements Serializable {
+	
+	private static final long serialVersionUID = 2L;
+	
 	private String name;
 	private String address;
 	private String phoneNumber;
