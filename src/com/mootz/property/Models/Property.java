@@ -67,11 +67,11 @@ public class Property implements Serializable {
 		return this.sold;
 	}
 
-	public boolean hasGarden() {
+	public boolean getHasGarden() {
 		return this.hasGarden;
 	}
 
-	public boolean hasGarage() {
+	public boolean getHasGarage() {
 		return this.hasGarage;
 	}
 
