@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.*;
 
-public class Branch implements Serializable {
+public class Branch implements Serializable, IAccount {
 	
 	private static final long serialVersionUID = 2L;
 	
@@ -62,11 +62,13 @@ public class Branch implements Serializable {
 	}
 	
 	//Gets the branch supervisors username.
+	@Override
 	public String getUsername() {
 		return this.username;
 	}
 	
 	//Gets the branch supervisors password.
+	@Override
 	public String getPassword() {
 		return this.password;
 	}
@@ -97,11 +99,13 @@ public class Branch implements Serializable {
 	}
 	
 	//Sets the user name of the branch supervisor.
+	@Override
 	public void setUsername(String username) {
 		this.username = username;
 	}
 	
 	//Sets the password for the branch supervisor.
+	@Override
 	public void setPassword(String password) {
 		this.password = password;
 	}
