@@ -1,7 +1,9 @@
 package com.mootz.property.Views;
 
 import com.mootz.property.Managers.*;
+import com.mootz.property.Controllers.*;
 import com.mootz.property.Models.*;
+import com.mootz.property.Views.*;
 
 public class Main {
 	public static void main(String[] args) {
@@ -11,5 +13,7 @@ public class Main {
 		System.out.println(LoginManager.CreateLogin(branch));
 		Branch b2 = (Branch)LoginManager.CanLogin("admin", "pass");
 		System.out.println(b2.getAllProperties().size());
+		
+		LoginView loginView = new LoginView();
 	}
 }
