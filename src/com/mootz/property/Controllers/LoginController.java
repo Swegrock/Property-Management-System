@@ -11,18 +11,18 @@ public class LoginController {
 		this.loginView = loginView;
 	}
 	
-	public boolean Login(String username, String password) {
+	public void Login(String username, String password) {
 		IAccount account = LoginManager.CanLogin(username, password);
 		if (account instanceof Admin) {
 			AdminController adminController = new AdminController((Admin)account);
 			AdminView adminView = new AdminView(adminController);
-			return true;
+			loginView.setVisible(false);
 		} else if (account instanceof Branch) {
 			BranchController branchController = new BranchController((Branch)account);
 			BranchView branchView = new BranchView(branchController);
-			return true;
+			loginView.setVisible(false);
 		} else {
-			return false;
+			loginView.DisplayDialog("Incorrect details", "The username or password entered were not recognised.");
 		}
 	}
 }
