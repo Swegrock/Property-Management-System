@@ -8,8 +8,8 @@ import com.mootz.property.Views.*;
 public class Main {
 	public static void main(String[] args) {
 		Admin admin = new Admin("Main Administrator", "admin", "12345");
-		System.out.println(LoginManager.CreateLogin(admin));		
-		LoginView loginView = new LoginView();
-		loginView.setVisible(true);
+		LoginManager.CreateLogin(admin);		
+		LoginController loginController = new LoginController();
+		loginController.ShowLoginWindow();
 	}
 }

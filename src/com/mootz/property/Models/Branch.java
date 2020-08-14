@@ -115,14 +115,20 @@ public class Branch implements Serializable, IAccount {
 		this.properties.add(property);
 	}
 	
+	//Edits a property
+	public void editProperty(Property property, int index) {
+		this.properties.add(index, property);
+		this.properties.remove(index + 1);
+	}
+	
 	//Removes a property.
 	public void removeProperty(Property property) {
 		this.properties.remove(property);
 	}
 	
-	//Gets an array list of all the properties.
-	public ArrayList<Property> getAllProperties() {
-		return this.properties;
+	//Gets a property from list.
+	public Property getProperty(int index) {
+		return this.properties.get(index);
 	}
 	
 	//Gets an array list of the properties marked houses, the variable sold determines whether the properties should be sold or not.
@@ -142,8 +148,27 @@ public class Branch implements Serializable, IAccount {
 				&& x.getSold() == sold));
 	}
 	
+	public ArrayList<Property> getProperties(String address, boolean sold){
+		return getPropertyArrayList(this.properties.stream().filter(x -> x.getSold() == sold
+				&& x.getAddress().contains(address)));
+	}
+	
+	//Gets an array list of the properties marked flats, the variable sold determines whether the properties should be sold or not.
+	public ArrayList<Property> getFlats(String address, boolean sold) {
+		return getPropertyArrayList(this.properties.stream().filter(x -> x.getPropertyType() == PropertyType.Flat
+				&& x.getSold() == sold
+				&& x.getAddress().contains(address)));
+	}
+	
+	//Gets an array list of the properties marked houses, the variable sold determines whether the properties should be sold or not.
+	public ArrayList<Property> getHouses(String address, boolean sold) {
+		return getPropertyArrayList(this.properties.stream().filter(x -> x.getPropertyType() == PropertyType.House
+				&& x.getSold() == sold
+				&& x.getAddress().contains(address)));
+	}
+	
 	//Gets an array list of properties from a stream.
-	public ArrayList<Property> getPropertyArrayList(Stream<Property> stream) { 
+	private ArrayList<Property> getPropertyArrayList(Stream<Property> stream) { 
 		List<Property> list = stream.collect(Collectors.toList()); 
 	    ArrayList<Property> arrayList = new ArrayList<Property>(list); 
 	    return arrayList; 

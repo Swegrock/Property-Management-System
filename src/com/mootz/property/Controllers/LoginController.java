@@ -7,22 +7,26 @@ import com.mootz.property.Models.*;
 public class LoginController {
 	private LoginView loginView;
 	
-	public LoginController(LoginView loginView) {
-		this.loginView = loginView;
+	public LoginController() {
+		this.loginView = new LoginView(this);
 	}
 	
 	public void Login(String username, String password) {
 		IAccount account = LoginManager.CanLogin(username, password);
 		if (account instanceof Admin) {
-			AdminController adminController = new AdminController((Admin)account);
-			AdminView adminView = new AdminView(adminController);
+			AdminController adminController = new AdminController((Admin)account, this);
 			loginView.setVisible(false);
+			adminController.ShowAdminWindow();
 		} else if (account instanceof Branch) {
-			BranchController branchController = new BranchController((Branch)account);
-			BranchView branchView = new BranchView(branchController);
+			BranchController branchController = new BranchController((Branch)account, this);
 			loginView.setVisible(false);
+			branchController.ShowBranchWindow();
 		} else {
-			loginView.DisplayDialog("Incorrect details", "The username or password entered were not recognised.");
+			DialogManager.DisplayMessage("Incorrect details", "The username or password entered were not recognised.");
 		}
+	}
+	
+	public void ShowLoginWindow() {
+		this.loginView.setVisible(true);
 	}
 }

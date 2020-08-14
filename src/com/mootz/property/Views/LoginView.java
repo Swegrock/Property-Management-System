@@ -23,14 +23,13 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
 public class LoginView extends JFrame {
-
-	private LoginController loginController;
+	
+	private static final long serialVersionUID = 4L;
 	private JPanel contentPane;
 	private JTextField textField;
 	private JPasswordField passwordField;
 	
-	public LoginView() {
-		this.loginController = new LoginController(this);
+	public LoginView(LoginController loginController) {
 		setTitle("Login");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -88,9 +87,6 @@ public class LoginView extends JFrame {
 		    }
 		});
 		contentPane.add(btnNewButton, gbc_btnNewButton);
-	}
-	
-	public void DisplayDialog(String title, String description) {
-		JOptionPane.showMessageDialog(null, description, title, JOptionPane.INFORMATION_MESSAGE);
+		this.getRootPane().setDefaultButton(btnNewButton);
 	}
 }

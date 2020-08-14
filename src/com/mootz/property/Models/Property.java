@@ -32,6 +32,9 @@ public class Property implements Serializable {
 		this.sold = sold;
 		this.hasGarden = hasGarden;
 		this.hasGarage = hasGarage;
+		
+		this.floorNumber = -1;
+		this.monthlyCharge = -1;
 	}
 
 	// Constructor for flat property.
@@ -43,6 +46,9 @@ public class Property implements Serializable {
 		this.sold = sold;
 		this.floorNumber = floorNumber;
 		this.monthlyCharge = monthlyCharge;
+		
+		this.hasGarage = false;
+		this.hasGarden = false;
 	}
 
 	//The gets.
