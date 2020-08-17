@@ -104,7 +104,7 @@ public class BranchView extends JFrame {
 		scrollPane.setBounds(12, 43, 693, 293);
 		contentPane.add(scrollPane);
 		
-		table = new JTable(branchController.getBranchTable());
+		table = new JTable(branchController.getPropertyTable());
 		scrollPane.setViewportView(table);
 		
 		JButton button = new JButton("Add Branch");

@@ -10,13 +10,18 @@ import com.mootz.property.Views.AdminView;
 
 public class AdminController {
 	
+	// The main login controller, stored to reactivate the main login when logging out.
 	private LoginController loginController;
 	
+	// The table of the admin view.
 	private DefaultTableModel branchTable;
 	
+	// The column titles of the table.
 	private String cols[] = {"Name", "Address", "Phone Number", "Email Address", "Web Address", "Username", "Password"};
 	
+	// The admin object.
 	private Admin admin;
+	// The admin view.
 	private AdminView adminView;
 	
 	public AdminController(Admin admin, LoginController loginController) {
@@ -31,6 +36,9 @@ public class AdminController {
 		return branchTable;
 	}
 	
+	// Creates a branch object by asking the user for all of the details of the branch.
+	// Then once all the details have been provided the object will be created and returned.
+	// If at any point the user neglects to provide any details null will be returned.
 	public Branch GetNewBranch(String name, String address, String phoneNumber, String emailAddress, String webAddress, String username, String password) {
 		name = DialogManager.GetInput("Enter the name of the branch:", name);
 		if (name.equals(""))
@@ -68,6 +76,7 @@ public class AdminController {
 		return new Branch(name, address, phoneNumber, emailAddress, webAddress, username, password);
 	}
 	
+	// Adds a new branch.
 	public void AddNewBranch() {
 		Branch branch = GetNewBranch("", "", "", "", "", "", "");
 		if (branch == null)
@@ -78,6 +87,7 @@ public class AdminController {
 		DialogManager.DisplayMessage("New Branch Added", "A new branch has been successfully created and added to the list of branches.");
 	}
 	
+	// Edits the currently selected branch in the admin view.
 	public void EditBranch(int index) {
 		if (index < 0)
 			return;
@@ -98,6 +108,7 @@ public class AdminController {
 		DialogManager.DisplayMessage("Branch Updated", "Branch has been successfully updated and changes will apply immediately.");
 	}
 	
+	// Deletes the currently selected branch in the admin view.
 	public void DeleteBranch(int index) {
 		if (index < 0)
 			return;
@@ -109,6 +120,7 @@ public class AdminController {
 		DialogManager.DisplayMessage("Branch Deleted", "Branch has been successfully deleted.");
 	}
 	
+	// Edits the details of the admin.
 	public void EditAdminDetails() {
 		admin.setName(DialogManager.GetInput("Enter the name of the admin:", admin.getName()));
 		admin.setUsername(DialogManager.GetInput("Enter the username for the admin:", admin.getUsername()));
@@ -117,15 +129,18 @@ public class AdminController {
 		DialogManager.DisplayMessage("Admin Updated", "The details for the admin acount have been successfully updated.");
 	}
 	
+	// Shows the admin view.
 	public void ShowAdminWindow() {
 		this.adminView.setVisible(true);
 	}
 	
+	// Logs out the admin and reopens the login window.
 	public void LogOut() {
 		this.adminView.setVisible(false);
 		this.loginController.ShowLoginWindow();
 	}
 	
+	// Refreshes the table by clearing it and adding all branch files which can be found.
 	private void RefreshTable() {
 		if (branchTable.getRowCount() > 0) {
 		    for (int i = branchTable.getRowCount() - 1; i > -1; i--) {
