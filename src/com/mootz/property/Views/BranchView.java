@@ -118,7 +118,7 @@ public class BranchView extends JFrame {
 	    };
 		scrollPane.setViewportView(table);
 		
-		JButton button = new JButton("Add Branch");
+		JButton button = new JButton("Add Property");
 		button.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
@@ -128,7 +128,7 @@ public class BranchView extends JFrame {
 		button.setBounds(8, 349, 120, 25);
 		contentPane.add(button);
 		
-		JButton button_1 = new JButton("Edit Branch");
+		JButton button_1 = new JButton("Edit Property");
 		button_1.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
@@ -138,7 +138,7 @@ public class BranchView extends JFrame {
 		button_1.setBounds(288, 349, 120, 25);
 		contentPane.add(button_1);
 		
-		JButton button_2 = new JButton("Delete Branch");
+		JButton button_2 = new JButton("Delete Property");
 		button_2.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
