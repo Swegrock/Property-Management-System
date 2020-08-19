@@ -31,11 +31,6 @@ public class Branch implements Serializable, IAccount {
 		this.properties = new ArrayList<Property>();
 	}
 	
-	//Load a branch from a file.
-	public Branch(String filePath) {
-		
-	}
-	
 	//Get the branch name.
 	public String getName() {
 		return this.name;
@@ -165,14 +160,6 @@ public class Branch implements Serializable, IAccount {
 		return getPropertyArrayList(this.properties.stream().filter(x -> x.getPropertyType() == PropertyType.House
 				&& x.getSold() == sold
 				&& x.getAddress().contains(address)));
-	}
-	
-	public ArrayList<Property> getProperties() {
-		return properties;
-	}
-	
-	public ArrayList<Property> getProperties(String address) {
-		return getPropertyArrayList(this.properties.stream().filter(x -> x.getAddress().contains(address)));
 	}
 	
 	//Gets an array list of properties from a stream.

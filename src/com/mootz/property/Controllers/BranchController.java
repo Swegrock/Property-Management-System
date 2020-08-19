@@ -221,7 +221,7 @@ public class BranchController {
 		} else if (showFlats) {
 			properties = branch.getFlats(showSold);
 		} else {
-			properties = branch.getProperties();
+			properties = branch.getProperties(showSold);
 		}
 		
 		for (Property property : properties) {
@@ -265,7 +265,7 @@ public class BranchController {
 		} else if (showFlats) {
 			properties = branch.getFlats(input, showSold);
 		} else {
-			properties = branch.getProperties(input);
+			properties = branch.getProperties(input, showSold);
 		}
 		
 		for (Property property : properties) {
