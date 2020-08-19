@@ -112,7 +112,13 @@ public class AdminView extends JFrame {
 		scrollPane.setBounds(12, 13, 707, 343);
 		contentPane.add(scrollPane);
 		
-		table = new JTable(adminController.getBranchTable());
+		table = new JTable(adminController.getBranchTable()){
+			private static final long serialVersionUID = 8L;
+			
+	        public boolean editCellAt(int row, int column, java.util.EventObject e) {
+	        	return false;
+	        }
+	    };
 		scrollPane.setViewportView(table);
 	}
 }

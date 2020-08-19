@@ -1,6 +1,7 @@
 package com.mootz.property.Views;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +15,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import com.mootz.property.Controllers.BranchController;
+
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -22,9 +25,11 @@ import javax.swing.JRadioButton;
 import javax.swing.JCheckBox;
 import javax.swing.JScrollPane;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JTextPane;
+import javax.swing.JLabel;
 
 public class BranchView extends JFrame {
 
@@ -104,7 +109,13 @@ public class BranchView extends JFrame {
 		scrollPane.setBounds(12, 43, 693, 293);
 		contentPane.add(scrollPane);
 		
-		table = new JTable(branchController.getPropertyTable());
+		table = new JTable(branchController.getPropertyTable()){
+			private static final long serialVersionUID = 8L;
+			
+	        public boolean editCellAt(int row, int column, java.util.EventObject e) {
+	        	return false;
+	        }
+	    };
 		scrollPane.setViewportView(table);
 		
 		JButton button = new JButton("Add Branch");
@@ -139,6 +150,8 @@ public class BranchView extends JFrame {
 		
 		JTextPane textPane = new JTextPane();
 		textPane.setBounds(489, 9, 216, 22);
+		Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
+        textPane.setBorder(border);
 		textPane.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent arg0) {
@@ -155,5 +168,9 @@ public class BranchView extends JFrame {
 			}
 		});
 		contentPane.add(textPane);
+		
+		JLabel lblNewLabel = new JLabel("Filter by address:");
+		lblNewLabel.setBounds(378, 9, 109, 16);
+		contentPane.add(lblNewLabel);
 	}	
 }

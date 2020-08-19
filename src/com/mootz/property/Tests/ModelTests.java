@@ -100,7 +100,7 @@ class ModelTests {
 	
 	@Test
 	void FlatTestGetAndSetValues() {
-		Property house = getHouse();
+		Property house = getFlat();
 		
 		Assert.assertEquals(testAddress, house.getAddress());
 		Assert.assertEquals(0.0f, house.getPrice(), 0.05f);

@@ -13,8 +13,8 @@ public class DialogManager {
 		return JOptionPane.showInputDialog(null, contents, defaultText);
 	}
 	
-	public static int GetDropDown(String contents, String[] drops) {
-		String choice = JOptionPane.showInputDialog(null, contents, "Input", JOptionPane.QUESTION_MESSAGE, null, drops, drops[0]).toString();
+	public static int GetDropDown(String contents, String[] drops, int num) {
+		String choice = JOptionPane.showInputDialog(null, contents, "Input", JOptionPane.QUESTION_MESSAGE, null, drops, drops[num]).toString();
 		return Arrays.asList(drops).indexOf(choice);
 	}
 }

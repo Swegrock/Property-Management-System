@@ -8,6 +8,7 @@ import com.mootz.property.Managers.DialogManager;
 import com.mootz.property.Managers.LoginManager;
 import com.mootz.property.Models.Branch;
 import com.mootz.property.Models.Property;
+import com.mootz.property.Models.PropertyType;
 import com.mootz.property.Views.BranchView;
 import com.mootz.property.Views.ParseHelper;
 
@@ -20,7 +21,7 @@ public class BranchController {
 	private DefaultTableModel propertyTable;
 	
 	// The column titles of the table.
-	private String cols[] = {"Property Type", "Address", "Number Of Rooms", "Price", "Has Garden", "Has Garage", "Floor Number", "Monthly Charge"};
+	private String cols[] = {"Property Type", "Address", "Number Of Rooms", "Price", "Has Garden", "Has Garage", "Floor Number", "Monthly Charge", "Sold"};
 	
 	// The combo box options for determining whether a property is a house or flat.
 	private String types[] = {"House", "Flat"};
@@ -73,21 +74,21 @@ public class BranchController {
 	// Creates a property object by asking the user for all of the details of the property.
 	// Then once all the details have been provided the object will be created and returned.
 	// If at any point the user neglects to provide any details null will be returned.
-	private Property GetNewProperty(String address, float price, Boolean sold, int numberOfRooms, Boolean hasGarden, Boolean hasGarage, int floorNumber, float monthlyCharge) {
-		int index = DialogManager.GetDropDown("Select the type of property:", types);
+	private Property GetNewProperty(PropertyType type, String address, float price, Boolean sold, int numberOfRooms, Boolean hasGarden, Boolean hasGarage, int floorNumber, float monthlyCharge) {
+		int index = DialogManager.GetDropDown("Select the type of property:", types, (type == PropertyType.House) ? 0 : 1);
 		if (index < 0) {
 			return null;
 		}
 		
 		address = DialogManager.GetInput("Enter the property address:", address);
-		if (address.equals(""))
+		if (address == null || address.equals(""))
 			return null;
 		
 		price = GetFloatInput("Enter the price of the property:", Float.toString(price));
 		if (price < 0)
 			return null;
 		
-		sold = GetYesNoInput("Is the property sold?:");
+		sold = GetYesNoInput("Is the property sold?:", sold);
 		if (sold == null)
 			return null;
 		
@@ -96,11 +97,11 @@ public class BranchController {
 			return null;
 		
 		if (index == 0) {
-			hasGarden = GetYesNoInput("Does the property have a garden?:");
+			hasGarden = GetYesNoInput("Does the property have a garden?:", hasGarden);
 			if (hasGarden == null)
 				return null;
 			
-			hasGarage = GetYesNoInput("Does the property have a garage?:");
+			hasGarage = GetYesNoInput("Does the property have a garage?:", hasGarden);
 			if (hasGarage == null)
 				return null;
 			
@@ -120,7 +121,7 @@ public class BranchController {
 	// Gets an integer input from the user.
 	private int GetIntInput(String contents, String defaultText) {
 		String str = DialogManager.GetInput(contents, defaultText);
-		if (str.equals(""))
+		if (str == null || str.equals(""))
 			return -1;
 		while (!ParseHelper.TryParseInt(str)) {
 			str = DialogManager.GetInput("Invalid format. " + contents, defaultText);
@@ -131,7 +132,7 @@ public class BranchController {
 	// Gets a floating point input from the user.
 	private float GetFloatInput(String contents, String defaultText) {
 		String str = DialogManager.GetInput(contents, defaultText);
-		if (str.equals(""))
+		if (str == null || str.equals(""))
 			return -1;
 		while (!ParseHelper.TryParseFloat(str)) {
 			str = DialogManager.GetInput("Invalid format. " + contents, defaultText);
@@ -140,8 +141,11 @@ public class BranchController {
 	}
 	
 	// Gets a yes or no (boolean) input from the user.
-	private Boolean GetYesNoInput(String contents) {
-		int num = DialogManager.GetDropDown(contents, yesno);
+	private Boolean GetYesNoInput(String contents, Boolean defaultValue) {
+		if (defaultValue == null)
+			defaultValue = true;
+		int oldnum = defaultValue ? 0 : 1;
+		int num = DialogManager.GetDropDown(contents, yesno, oldnum);
 		if (num == 0) {
 			return true;
 		} else if (num == 1) {
@@ -153,37 +157,38 @@ public class BranchController {
 	
 	// Adds a new property.
 	public void AddNewProperty() {
-		Property property = GetNewProperty("", 0, null, 0, null, null, 0, 0);
+		Property property = GetNewProperty(PropertyType.House ,"", 0, null, 0, null, null, 0, 0);
 		if (property == null)
 			return;
 		branch.addProperty(property);
 		
 		RefreshTable();
 		LoginManager.UpdateLogin(branch);
-		DialogManager.DisplayMessage("New Property Added", "A new property has been successfully added to the list of branches.");
+		DialogManager.DisplayMessage("New Property Added", "A new property has been successfully added to the list of properties.");
 	}
 	
 	// Edits the currently selected property in the branch view.
 	public void EditProperty(int index) {
-		Property oldProperty = branch.getProperty(index);
-		Property editedProperty = GetNewProperty(oldProperty.getAddress(), oldProperty.getPrice(), oldProperty.getSold(), oldProperty.getNumberOfRooms(), oldProperty.getHasGarden(), oldProperty.getHasGarage(), oldProperty.getFloorNumber(), oldProperty.getMonthlyCharge());
+		Property oldProperty = branch.getProperty(propertyTable.getValueAt(index, 1).toString());
+		Property editedProperty = GetNewProperty(oldProperty.getPropertyType(), oldProperty.getAddress(), oldProperty.getPrice(), oldProperty.getSold(), oldProperty.getNumberOfRooms(), oldProperty.getHasGarden(), oldProperty.getHasGarage(), oldProperty.getFloorNumber(), oldProperty.getMonthlyCharge());
 		if (editedProperty == null)
 			return;
-		branch.editProperty(editedProperty, index);
+		branch.removeProperty(oldProperty);
+		branch.addProperty(editedProperty);
 		
 		RefreshTable();
 		LoginManager.UpdateLogin(branch);
-		DialogManager.DisplayMessage("Property Updated", Integer.toString(index));
+		DialogManager.DisplayMessage("Property Updated", "The property has been successfully updated.");
 	}
 
 	// Deletes the currently selected property in the branch view.
 	public void DeleteProperty(int index) {
-		Property property = branch.getProperty(index);
+		Property property = branch.getProperty(propertyTable.getValueAt(index, 1).toString());
 		branch.removeProperty(property);
 		
 		RefreshTable();
 		LoginManager.UpdateLogin(branch);
-		DialogManager.DisplayMessage("Property Deleted", Integer.toString(index));
+		DialogManager.DisplayMessage("Property Deleted", "The property has been successfully deleted.");
 	}
 	
 	// Shows the branch view.
@@ -216,11 +221,26 @@ public class BranchController {
 		} else if (showFlats) {
 			properties = branch.getFlats(showSold);
 		} else {
-			properties = branch.getProperties(showSold);
+			properties = branch.getProperties();
 		}
 		
 		for (Property property : properties) {
-			String row[] = {property.getPropertyType().toString(), property.getAddress(), Integer.toString(property.getNumberOfRooms()), Float.toString(property.getPrice()), property.getHasGarden() ? "Yes" : "No", property.getHasGarage() ? "Yes" : "No", Integer.toString(property.getFloorNumber()), Float.toString(property.getMonthlyCharge())};
+			String hasGarden;
+			String hasGarage;
+			String floorNumber;
+			String monthlyCharge;
+			if (property.getPropertyType() == PropertyType.House) {
+				hasGarden = property.getHasGarden() ? "Yes" : "No";
+				hasGarage = property.getHasGarage() ? "Yes" : "No";
+				floorNumber = "N/A";
+				monthlyCharge = "N/A";
+			} else {
+				hasGarden = "N/A";
+				hasGarage = "N/A";
+				floorNumber = Integer.toString(property.getFloorNumber());
+				monthlyCharge = Float.toString(property.getMonthlyCharge());
+			}
+			String row[] = {property.getPropertyType().toString(), property.getAddress(), Integer.toString(property.getNumberOfRooms()), Float.toString(property.getPrice()), hasGarden, hasGarage, floorNumber, monthlyCharge, property.getSold() ? "Yes" : "No"};
 			propertyTable.addRow(row);
 		}
 	}
@@ -245,11 +265,26 @@ public class BranchController {
 		} else if (showFlats) {
 			properties = branch.getFlats(input, showSold);
 		} else {
-			properties = branch.getProperties(input, showSold);
+			properties = branch.getProperties(input);
 		}
 		
 		for (Property property : properties) {
-			String row[] = {property.getPropertyType().toString(), property.getAddress(), Integer.toString(property.getNumberOfRooms()), Float.toString(property.getPrice()), property.getHasGarden() ? "Yes" : "No", property.getHasGarage() ? "Yes" : "No", Integer.toString(property.getFloorNumber()), Float.toString(property.getMonthlyCharge())};
+			String hasGarden;
+			String hasGarage;
+			String floorNumber;
+			String monthlyCharge;
+			if (property.getPropertyType() == PropertyType.House) {
+				hasGarden = property.getHasGarden() ? "Yes" : "No";
+				hasGarage = property.getHasGarage() ? "Yes" : "No";
+				floorNumber = "N/A";
+				monthlyCharge = "N/A";
+			} else {
+				hasGarden = "N/A";
+				hasGarage = "N/A";
+				floorNumber = Integer.toString(property.getFloorNumber());
+				monthlyCharge = Float.toString(property.getMonthlyCharge());
+			}
+			String row[] = {property.getPropertyType().toString(), property.getAddress(), Integer.toString(property.getNumberOfRooms()), Float.toString(property.getPrice()), hasGarden, hasGarage, floorNumber, monthlyCharge, property.getSold() ? "Yes" : "No"};
 			propertyTable.addRow(row);
 		}
 	}

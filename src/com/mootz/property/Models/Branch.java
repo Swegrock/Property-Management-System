@@ -127,8 +127,8 @@ public class Branch implements Serializable, IAccount {
 	}
 	
 	//Gets a property from list.
-	public Property getProperty(int index) {
-		return this.properties.get(index);
+	public Property getProperty(String address) {
+		return this.properties.stream().filter(x -> x.getAddress() == address).findFirst().get();
 	}
 	
 	//Gets an array list of the properties marked houses, the variable sold determines whether the properties should be sold or not.
@@ -165,6 +165,14 @@ public class Branch implements Serializable, IAccount {
 		return getPropertyArrayList(this.properties.stream().filter(x -> x.getPropertyType() == PropertyType.House
 				&& x.getSold() == sold
 				&& x.getAddress().contains(address)));
+	}
+	
+	public ArrayList<Property> getProperties() {
+		return properties;
+	}
+	
+	public ArrayList<Property> getProperties(String address) {
+		return getPropertyArrayList(this.properties.stream().filter(x -> x.getAddress().contains(address)));
 	}
 	
 	//Gets an array list of properties from a stream.
